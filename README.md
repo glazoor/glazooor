@@ -1,0 +1,2 @@
+# glazooor
+discord bot reibot
