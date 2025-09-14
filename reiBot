@@ -1,0 +1,149 @@
+import discord
+from discord.ext import commands
+import os, random
+
+intents = discord.Intents.default()
+intents.message_content = True   
+intents.guilds = True
+intents.members = True
+
+bot = commands.Bot(command_prefix="", intents=intents, help_command=None)
+
+
+IMAGE_FOLDER = "images"
+IMAGE_FOLDER1 = "bread"
+IMAGE_FOLDER2 = "mold"
+QUOTES_FILE = "quotes.txt"
+
+WELCOME_CHANNEL_ID = 1138748801331515412 
+
+QUOTES = [
+    "BALLS. – Rei",
+    "I love DEEZ nuts jokes. – Rei",
+    "I suggest not breathing - Rei",
+
+]
+
+
+
+@bot.event
+async def on_ready():
+    print(f"✅ Logged in as {bot.user} (ID: {bot.user.id})")
+    
+    
+@bot.event
+async def on_guild_join(guild):
+    channel = bot.get_channel(WELCOME_CHANNEL_ID)
+    if channel and channel.guild == guild:
+        await channel.send("🤖 Thanks for adding me to your server! Type `!help` to see what I can do.")
+    else:
+        print(f"⚠️ Could not find the channel with ID {WELCOME_CHANNEL_ID} in {guild.name}")  
+
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+
+    # Check if the message is ONLY a mention of the bot
+    if message.content.strip() in (f"<@{bot.user.id}>", f"<@!{bot.user.id}>"):
+        await message.channel.send("*balls balls balls balls balls balls*")
+
+    # Keep commands working
+    await bot.process_commands(message)
+
+
+@bot.command()
+async def bread(ctx):
+    if not os.path.exists(IMAGE_FOLDER1):
+        await ctx.send("⚠️ Image folder not found.")
+        return
+
+    bread = [f for f in os.listdir(IMAGE_FOLDER1) if os.path.isfile(os.path.join(IMAGE_FOLDER1, f))]
+    if not bread:
+        await ctx.send("⚠️ No mold found in the folder.")
+        return
+
+    chosen = random.choice(bread)
+    await ctx.send(file=discord.File(os.path.join(IMAGE_FOLDER1, chosen)))
+    
+
+
+@bot.command()
+async def mold(ctx):
+    if not os.path.exists(IMAGE_FOLDER2):
+        await ctx.send("⚠️ Image folder not found.")
+        return
+    
+    mold = [f for f in os.listdir(IMAGE_FOLDER2) if os.path.isfile(os.path.join(IMAGE_FOLDER2, f))]
+    
+    if not mold:
+        await ctx.send("⚠️ No mold found in the folder.")
+        return
+
+    chosen = random.choice(mold)
+    await ctx.send(file=discord.File(os.path.join(IMAGE_FOLDER2, chosen)))
+
+@bot.command()  
+async def bald(ctx):
+    if not os.path.exists(IMAGE_FOLDER):
+        await ctx.send("⚠️ Image folder not found.")
+        return
+    
+
+    images = [f for f in os.listdir(IMAGE_FOLDER) if os.path.isfile(os.path.join(IMAGE_FOLDER, f))]
+    
+    if not images:
+        await ctx.send("⚠️ No images found in the folder.")
+        return
+
+    chosen = random.choice(images)
+    await ctx.send(file=discord.File(os.path.join(IMAGE_FOLDER, chosen)))
+    
+    
+@bot.command()
+async def quote(ctx):
+    for i in range(1):
+        chosen = random.choice(QUOTES)
+        await ctx.send(chosen)
+        
+    
+@bot.command()
+async def help(ctx):
+    help_message = """
+    **Available Commands:**
+    `bread` - Sends a random bread image.
+    `mold` - Sends a random mold image.
+    `bald` - Sends a random bald image.
+    `quote` - Sends a random quote.
+    `help` - Displays this help message.
+    *THIS BOT RUNS ON GLAZOR'S PC SO IF IT IS OFFLINE, THAT'S WHY.*
+    """
+    await ctx.send(help_message)
+    
+# Load quotes from file (or use defaults if none)
+if os.path.exists(QUOTES_FILE):
+    with open(QUOTES_FILE, "r", encoding="utf-8") as f:
+        QUOTES = [line.strip() for line in f if line.strip()]
+else:
+    QUOTES = [
+        "BALLS. – Rei",
+        "I love DEEZ nuts jokes. – Rei",
+        "I suggest not breathing - Rei",
+    ]
+    
+def save_quotes():
+    with open(QUOTES_FILE, "w", encoding="utf-8") as f:
+        for q in QUOTES:
+            f.write(q + "\n")
+
+@bot.command()
+async def addquote(ctx, *, new_quote: str):
+    QUOTES.append(new_quote)  # add new quote
+    save_quotes()  # save to file
+    await ctx.send(f"✅ Quote added: \"{new_quote}\"")
+    
+
+    
+
+bot.run("YOUR_BOT_TOKEN") # type: ignore
