@@ -1,28 +1,31 @@
 <?php
  
-    // FUNCTION: Validate and Display Output
+    // Take user input from form fields.
     function processForm()
     {
-        // Check if the form is submitted using POST method
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // If the $_POST is not empty, then the form was submitted.
+        if (!empty($_POST)) {
 
-            // Take form data directly 
+            // Store data from the firstname field
             $firstName = $_POST["firstname"];
+            // Store data from the age field
             $age = $_POST["age"];
+            // Store data from the gender field
             $gender = $_POST["gender"];
+            // Store data from the quote field
             $quote = $_POST["quote"];
 
-            // Check if field is empty
+            // Check if any field is empty and display error message 
             if (empty($firstName) || empty($age) || empty($gender) || empty($quote)) {
                 echo "<p style='color:red;'>All fields are required. Please fill in all fields.</p>";
             } else {
-                // Show output
+                // Show output 
                 echo "<h3>You are $firstName, a $age-year-old $gender. Your motto in life is: \"$quote\"</h3>";
             }
         }
     }
 
-    // Call the processForm to process form when information is submitted
+    // Call the processForm to process input data when information is submitted
     processForm();
     ?>
 
