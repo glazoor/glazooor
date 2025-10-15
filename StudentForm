@@ -1,0 +1,62 @@
+<?php
+ 
+    // FUNCTION: Validate and Display Output
+    function processForm()
+    {
+        // Check if the form is submitted using POST method
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            // Take form data directly 
+            $firstName = $_POST["firstname"];
+            $age = $_POST["age"];
+            $gender = $_POST["gender"];
+            $quote = $_POST["quote"];
+
+            // Check if field is empty
+            if (empty($firstName) || empty($age) || empty($gender) || empty($quote)) {
+                echo "<p style='color:red;'>All fields are required. Please fill in all fields.</p>";
+            } else {
+                // Show output
+                echo "<h3>You are $firstName, a $age-year-old $gender. Your motto in life is: \"$quote\"</h3>";
+            }
+        }
+    }
+
+    // Call the processForm to process form when information is submitted
+    processForm();
+    ?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Form</title>
+</head>
+<body>
+    
+
+    <!-- Registration Form -->
+    <form method="POST" action="">
+        <label>First Name:</label><br>
+        <input type="text" name="firstname" pattern="[A-Za-z]+" title="Please enter letters only"><br><br>
+
+        <label>Age:</label><br>
+        <input type="number" name="age"><br><br>
+
+        <label>Gender:</label><br>
+        <select name="gender">
+            <option value="">-- Select Gender --</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select><br><br>
+
+        <label>Quote in Life:</label><br>
+        <textarea name="quote" rows="3" cols="30"></textarea><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
