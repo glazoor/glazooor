@@ -9,7 +9,7 @@ intents.members = True
 
 bot = commands.Bot(command_prefix="", intents=intents, help_command=None)
 
-
+#Image folders
 IMAGE_FOLDER = "images"
 IMAGE_FOLDER1 = "bread"
 IMAGE_FOLDER2 = "mold"
@@ -25,12 +25,12 @@ QUOTES = [
 ]
 
 
-
+#When bot joins a server
 @bot.event
 async def on_ready():
     print(f"✅ Logged in as {bot.user} (ID: {bot.user.id})")
     
-    
+#When bot joins a specific channel in the server
 @bot.event
 async def on_guild_join(guild):
     channel = bot.get_channel(WELCOME_CHANNEL_ID)
@@ -39,7 +39,7 @@ async def on_guild_join(guild):
     else:
         print(f"⚠️ Could not find the channel with ID {WELCOME_CHANNEL_ID} in {guild.name}")  
 
-
+#When bot is mentioned in chat
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -52,7 +52,7 @@ async def on_message(message):
     # Keep commands working
     await bot.process_commands(message)
 
-
+#When the !bread is used in chat and goes inside the folder named bread to check if there's an image and pick random image to send
 @bot.command()
 async def bread(ctx):
     if not os.path.exists(IMAGE_FOLDER1):
@@ -68,7 +68,7 @@ async def bread(ctx):
     await ctx.send(file=discord.File(os.path.join(IMAGE_FOLDER1, chosen)))
     
 
-
+#When !mold is used in chat it goes inside the folder named mold and check if there's an image and pick random image to send
 @bot.command()
 async def mold(ctx):
     if not os.path.exists(IMAGE_FOLDER2):
@@ -84,6 +84,7 @@ async def mold(ctx):
     chosen = random.choice(mold)
     await ctx.send(file=discord.File(os.path.join(IMAGE_FOLDER2, chosen)))
 
+#When !bald is used in chat and goes inside the folder named image (I haven't change the folder name) and check if there's an image and pick one randomly to send
 @bot.command()  
 async def bald(ctx):
     if not os.path.exists(IMAGE_FOLDER):
@@ -99,15 +100,15 @@ async def bald(ctx):
 
     chosen = random.choice(images)
     await ctx.send(file=discord.File(os.path.join(IMAGE_FOLDER, chosen)))
-    
-    
+
+#When !quote is used and goes inside the quote txt file to check if there's a quote and pick one randomly to send
 @bot.command()
 async def quote(ctx):
     for i in range(1):
         chosen = random.choice(QUOTES)
         await ctx.send(chosen)
         
-    
+#Displays when a user sends !tasukite in chat
 @bot.command()
 async def help(ctx):
     help_message = """
